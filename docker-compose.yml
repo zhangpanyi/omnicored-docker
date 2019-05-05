@@ -1,0 +1,29 @@
+version: "3.0"
+
+services:
+  omnicored:
+    image: omnicored
+    build:
+      context: .
+    logging:
+      driver: json-file
+      options:
+        max-file: "5"
+        max-size: 10m
+    container_name: omnicored
+    tty: true
+    stdin_open: true
+    expose:
+      - 8332
+      - 18332
+    ports:
+      - 8332:8332
+      - 18332:18332
+    volumes:
+      - omnicored-data-volume:/root/.bitcoin/
+      - ./bitcoin.conf:/omnicore/bin/bitcoin.conf
+    command: -conf=/omnicore/bin/bitcoin.conf
+
+volumes:
+  omnicored-data-volume:
+    external: true
